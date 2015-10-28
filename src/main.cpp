@@ -81,7 +81,7 @@
 
 #include <DifferentialRobot.h>
 
-
+// #include <ros/ros.h>
 // User includes here
 
 // Namespaces
@@ -151,6 +151,8 @@ int ::clientRosRob::run(int argc, char* argv[])
 	mprx["DifferentialRobotPub"] = (::IceProxy::Ice::Object*)(&differentialrobot);
 
 
+        //initialize ROS
+        ros::init(argc,argv,"clientRosRob");
 
 	SpecificWorker *worker = new SpecificWorker(mprx);
 	//Monitor thread

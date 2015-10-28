@@ -23,25 +23,22 @@
 */
 SpecificWorker::SpecificWorker(MapPrx& mprx) : GenericWorker(mprx)
 {
-
+    //published
+    pubROS = nh.advertise<std_msgs::String> (nh.resolveName("testPublication"),1);
+    // --> If you look this. write in the terminal  ------>> rostopic echo /testPublication
+    
+    // subcribe
+    subROS = nh.subscribe("chatter", 1000, &SpecificWorker::chatterCallback, this);\
 }
 
 /**
 * \brief Default destructor
 */
-SpecificWorker::~SpecificWorker()
-{
-	
-}
+SpecificWorker::~SpecificWorker() {}
 
 bool SpecificWorker::setParams(RoboCompCommonBehavior::ParameterList params)
 {
-
-
-
-	
 	timer.start(Period);
-
 	return true;
 }
 
@@ -57,10 +54,23 @@ void SpecificWorker::compute()
 // 	{
 // 		std::cout << "Error reading from Camera" << e << std::endl;
 // 	}
+
+    
+    // Only publish with the next lines:
+    str->data = "If you are seeing this...";
+    pubROS.publish(str);
+    ROS_INFO_STREAM("hello!!!");
+    ros::spinOnce();
+    /////////////////
 }
 
 
 
+
+void SpecificWorker::chatterCallback(const std_msgs::String::ConstPtr& msg)
+{
+  ROS_INFO("I heard: [%s]", msg->data.c_str());
+}
 
 
 

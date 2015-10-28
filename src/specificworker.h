@@ -34,14 +34,25 @@
 #include <genericworker.h>
 #include <innermodel/innermodel.h>
 
+#include <ros/ros.h>
+#include <std_msgs/String.h>
+
 class SpecificWorker : public GenericWorker
 {
 Q_OBJECT
 public:
+    
+        ros::Subscriber subROS;
+        ros::Publisher  pubROS;
+
+        ros::NodeHandle nh;
+        std_msgs::StringPtr str;
+        
 	SpecificWorker(MapPrx& mprx);	
 	~SpecificWorker();
 	bool setParams(RoboCompCommonBehavior::ParameterList params);
 
+        void chatterCallback(const std_msgs::String::ConstPtr& msg);
 
 public slots:
 	void compute(); 	
